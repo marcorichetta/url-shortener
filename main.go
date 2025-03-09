@@ -13,12 +13,12 @@ import (
 
 type Mapper struct {
 	Mapping map[string]string
-	Lock sync.Mutex // Prevent deadlock
+	Lock    sync.Mutex // Prevent deadlock
 }
 
 var urlMapper Mapper
 
-func init()  {
+func init() {
 	urlMapper = Mapper{
 		Mapping: make(map[string]string),
 	}
@@ -34,12 +34,12 @@ func main() {
 
 	r.Post("/shorten", createShortURLHandler)
 	r.Get("/short/{key}", redirectHandler)
-	http.ListenAndServe(":3000", r)	
+	http.ListenAndServe(":3000", r)
 }
 
 func createShortURLHandler(w http.ResponseWriter, r *http.Request) {
-	
-	r.ParseForm(); // TODO: Parse JSON
+
+	r.ParseForm() // TODO: Parse JSON
 	originalURL := r.Form.Get("url")
 
 	if originalURL == "" {
@@ -55,7 +55,7 @@ func createShortURLHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusCreated)
 
-	result := fmt.Sprintf("http://localhost:3000/%s", key)
+	result := fmt.Sprintf("http://localhost:3000/short/%s", key)
 	w.Write([]byte(result))
 }
 
@@ -69,10 +69,9 @@ func redirectHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	
+	// It doesn't work without a full URL
 	http.Redirect(w, r, originalURL, http.StatusMovedPermanently)
 }
-
 
 // insertMapping adds a new mapping from a key to an original URL in the URL mapper.
 // It acquires a lock on the URL mapper to ensure thread-safety during the insertion.
@@ -92,5 +91,6 @@ func readMapping(key string) (string, bool) {
 	defer urlMapper.Lock.Unlock()
 
 	originalUrl, exists := urlMapper.Mapping[key]
+	log.Println("para la key", key, "la url es", originalUrl)
 	return originalUrl, exists
 }

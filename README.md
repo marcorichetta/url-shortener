@@ -15,3 +15,11 @@ http://localhost:3000/short/<some-uuid>
 
 # Go to the shortened URL and you will be redirected to the original URL
 ```
+
+## Load testing
+
+-   [Locust](https://locust.io/) is used for load testing
+
+```bash
+uvx locust --config locust.conf
+```

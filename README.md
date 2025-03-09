@@ -23,3 +23,12 @@ http://localhost:3000/short/<some-uuid>
 ```bash
 uvx locust --config locust.conf
 ```
+
+## TODO
+
+-   [x] Create simple API for shortening URLs
+-   [ ] Add database
+-   [ ] Add caching
+-   [ ] Load testing
+    -   [ ] Test for 5000 RPM
+-   [ ] Add frontend (Nice to have)
